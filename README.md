@@ -1,7 +1,7 @@
 # Python Quest
 
-Learn Python from zero to hero, in the browser. Ten modules, ~70 lessons and
-~140 graded exercises that run on a **real Python interpreter** (CPython 3.14
+Learn Python from zero to hero, in the browser. Ten modules, 68 lessons and
+140 graded exercises that run on a **real Python interpreter** (CPython 3.14
 compiled to WebAssembly via [Pyodide](https://pyodide.org)). Nothing to
 install, no accounts, nothing leaves your browser.
 

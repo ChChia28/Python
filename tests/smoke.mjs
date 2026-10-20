@@ -57,8 +57,8 @@ try {
   await page.goto(url(), { waitUntil: "load" });
   await page.waitForSelector("#runtime-status.ready", { timeout: 120000 });
   check(true, "Python runtime reported ready");
-  check((await page.locator(".mod-card").count()) >= 6, "dashboard lists modules");
-  check((await page.locator(".map-node").count()) >= 6, "course map has nodes");
+  check((await page.locator(".mod-card").count()) === 10, "dashboard lists 10 modules");
+  check((await page.locator(".map-node").count()) === 10, "course map has 10 nodes");
   const heroText = await page.locator(".hero p").first().textContent();
   check(/\d+ lessons and \d+ graded exercises/.test(heroText), `hero copy: ${heroText.trim().slice(0, 60)}…`);
   await page.screenshot({ path: join(SHOTS, "01-dashboard.png"), fullPage: true });
