@@ -11,8 +11,9 @@ import m05 from "./05-text.js";
 import m06 from "./06-iteration.js";
 import m07 from "./07-errors-files.js";
 import m08 from "./08-classes.js";
+import m09 from "./09-stdlib.js";
 
-export const MODULES = [m01, m02, m03, m04, m05, m06, m07, m08];
+export const MODULES = [m01, m02, m03, m04, m05, m06, m07, m08, m09];
 
 /** Every lesson, in course order, with a back-reference to its module. */
 export function allLessons() {
