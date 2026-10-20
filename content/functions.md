@@ -108,9 +108,15 @@ code that called the function**, so the program can keep working with it.
 def double(n):
     return n * 2
 
+def shout(word):
+    print(word.upper() + "!")
+
 result = double(21)
 print(result + 1)
 print(double(5) + double(6))
+
+answer = shout("hello")
+print(answer)
 ```
 
 `double(21)` *becomes* `42` wherever it is written. You can store it, add to
@@ -119,19 +125,10 @@ that — its result is gone the moment it hits the screen.
 
 ## No return means None
 
-If a function finishes without hitting a `return`, the call evaluates to
-`None`:
-
-```python
-def shout(word):
-    print(word.upper() + "!")
-
-answer = shout("hello")
-print(answer)
-```
-
-`HELLO!` is printed by the function; `None` is printed by the last line,
-because `shout` never returned anything. This is the single most common
+Look at the last two lines of that output. `HELLO!` is printed by `shout`
+itself; `None` is printed by `print(answer)`. If a function finishes without
+hitting a `return`, the call evaluates to `None` — and `shout` never returned
+anything. This is the single most common
 beginner bug: writing `print` inside the function, then trying to use the
 result and getting `None` — or `TypeError: unsupported operand type(s) for +:
 'NoneType' and 'int'` when you try to add to it.
@@ -225,7 +222,9 @@ otherwise use `"Hello"`. The parameter has become optional.
 ## Keyword arguments
 
 Up to now you have matched arguments to parameters by position. You can also
-name them, in which case the order does not matter:
+name them, in which case the order does not matter. The `book_room` function
+below has three optional parameters, and each call picks out just the ones it
+needs:
 
 ```python
 def book_room(guest, nights=1, breakfast=False, room_type="standard"):
@@ -325,23 +324,10 @@ print(count_vowels("Kuala Lumpur"))
 print(count_vowels("Ipoh"))
 ```
 
-`total` is born at the start of each call and gone at the end. Trying to read
-it outside confirms that:
-
-```python-error
-def count_vowels(text):
-    total = 0
-    for ch in text.lower():
-        if ch in "aeiou":
-            total += 1
-    return total
-
-count_vowels("Penang")
-print(total)
-```
-
+`total` is born at the start of each call and gone at the end. Try to read it
+outside — `count_vowels("Penang")` followed by `print(total)` — and you get
 `NameError: name 'total' is not defined`. The function's `total` is not
-visible out here — only its returned *value* is, and that was discarded.
+visible out here; only its returned *value* is, and that call discarded it.
 
 ## Reading a global is fine
 
@@ -389,7 +375,7 @@ global `visits` is never consulted at all.
 `global visits` at the top of the function tells Python "I mean the one
 outside":
 
-```python
+```python-static
 visits = 0
 
 def record_visit():
@@ -398,7 +384,7 @@ def record_visit():
 
 record_visit()
 record_visit()
-print(visits)
+print(visits)   # 2
 ```
 
 It works, and it is almost always the wrong tool. A function that silently
@@ -497,22 +483,19 @@ book_flight(*trip)
 
 details = {"origin": "KUL", "destination": "NRT", "passenger": "Daniel"}
 book_flight(**details)
-```
 
-Without the star, `book_flight(trip)` passes the whole list as a single
-argument and fails: `missing 2 required positional arguments`.
-
-The unpacking trick is everyday Python with `print`:
-
-```python
 scores = [88, 92, 79]
 print(scores)
 print(*scores)
 print(*scores, sep=" | ")
 ```
 
-The first line prints a list; the second prints three separate values, exactly
-as if you had written `print(88, 92, 79)`.
+Without the star, `book_flight(trip)` passes the whole list as a single
+argument and fails: `missing 2 required positional arguments`.
+
+The last three lines show the same trick with `print`, where it is everyday
+Python: `print(scores)` prints a list, while `print(*scores)` prints three
+separate values, exactly as if you had written `print(88, 92, 79)`.
 
 ## Forwarding arguments
 

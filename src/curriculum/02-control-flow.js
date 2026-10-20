@@ -483,11 +483,12 @@ export default {
           expectOutput: true,
           requires: [
             { re: "\\bfor\\b[\\s\\S]*\\bfor\\b", msg: "Use two for loops, one inside the other." },
-            { re: "\\*\\s*\\*\\s*(row|col|i|j|n|\\d)", not: true, msg: "Print the stars one at a time with the inner loop — no string multiplication." },
+            { re: "[\"']str[\"']\\s*\\*|\\*\\s*[\"']str[\"']", not: true, msg: "Print the stars one at a time with the inner loop — no string multiplication." },
           ],
           wrong: [
             "for row in range(1, 6):\n    for col in range(row):\n        print(\"*\")\n",
             "for row in range(5):\n    for col in range(row):\n        print(\"*\", end=\" \")\n    print()\n",
+            "for row in range(1, 6):\n    for col in range(1):\n        print(\"* \" * row)\n",
           ],
         },
         {
