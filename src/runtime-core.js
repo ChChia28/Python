@@ -11,7 +11,7 @@ export const PYODIDE_CDN = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}
 
 /** Everything the runner needs on the Python side, installed once. */
 export const RUNNER_PY = String.raw`
-import builtins, json, os, shutil, sys, traceback
+import builtins, importlib, json, os, shutil, sys, traceback
 
 _PYQUEST_DIRS = {"fresh": "/tmp/pyquest-run", "playground": "/tmp/pyquest-playground"}
 
@@ -24,6 +24,19 @@ def __pyquest_cwd(kind, reset):
         shutil.rmtree(path, ignore_errors=True)
     os.makedirs(path, exist_ok=True)
     os.chdir(path)
+    # the working directory is importable, so learners can write helpers.py
+    # and import it; previous runs' modules must not linger in the
+    # import cache or a rewritten file would be ignored
+    for d in _PYQUEST_DIRS.values():
+        if d in sys.path:
+            sys.path.remove(d)
+    sys.path.insert(0, path)
+    if reset:
+        for name, mod in list(sys.modules.items()):
+            f = getattr(mod, "__file__", None) or ""
+            if isinstance(f, str) and f.startswith("/tmp/pyquest"):
+                del sys.modules[name]
+        importlib.invalidate_caches()
 
 def __pyquest_error(e, filename):
     if isinstance(e, SyntaxError) and (e.filename == filename or e.filename is None):
